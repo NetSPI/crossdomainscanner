@@ -39,11 +39,15 @@ if verbose:
 for domain in domains:
     if verbose:
         print(" - " + domain)
-    #Regex to get only the root domain, am I missing any special characters?
+    #Regex to get only the root domain or wildcard, am I missing any special characters?
     #Currently excludes subdomains
-    domain = re.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{3,}|[A-Za-z]{2}\.[A-Za-z]{2}|[A-za-z]{2})(?:\n|$))', domain)
+    domain = re.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{3,}|[A-Za-z]{2}\.[A-Za-z]{2}|[A-za-z]{2})(?:\n|$))|(^\*(?:\n|$))', domain)
     if domain is not None:
         domain = domain.group(0)
+        #Is there a more elegant way to do this, than check in every loop?
+        if domain == '*':
+            print("\n------------Wildcard domain detected - YARD SALE------------")
+            continue
         try:
             whoisOutput = socket.gethostbyname(domain)
         except socket_error as serr:
@@ -59,5 +63,6 @@ if len(possibleDomains) > 0:
         print(domain)
 
 #Do some cleanup
-sys.stdout = sys.__stdout__
-f.close()
+if args.output:
+    sys.stdout = sys.__stdout__
+    f.close()
