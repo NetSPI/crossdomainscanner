@@ -1,43 +1,65 @@
 #!/usr/bin/python
-import os
-import regex
+import re
+import sys
+import socket
 import requests
-from subprocess import Popen, PIPE, STDOUT
-#TODO
-#Add flags for verbose mode and input/output file
+import argparse
+import errno
+from socket import error as socket_error
+
+#Parse command line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("domain", help="Search the crossdomain.xml file on <domain>, must be fully-qualified (i.e. http[s]://)")
+parser.add_argument("-v", "--verbose", help="Print information to the console during runtime",action="store_true")
+parser.add_argument("-o", "--output", type=str,
+                    help="Write output to file")
+args = parser.parse_args()
 
 
+inputDomain = args.domain
+verbose = False
+if args.verbose:
+    verbose = True
+if args.output:
+    f = open(args.output, 'w')
+    sys.stdout = f
 
-inputDomain = raw_input("Please enter fully-qualified domain name to search: ")
-print("====================================================================================\n")
-print("Searching crossdomain.xml on " + inputDomain + " for unregistered domains\n")
-print("====================================================================================")
+if verbose:
+    print("Searching crossdomain.xml on " + inputDomain + " for unregistered domains\n")
+    print("=============================================================\n")
+
+#Request the crossdomain file
 crossDomain = requests.get(inputDomain+"/crossdomain.xml", timeout=10)
-domains = regex.findall(r'<allow-.*-from domain="(.*)"[ ]*?[\/]?>', crossDomain.text)
-#remove any duplicates
+#Parse out all domains from the file
+domains = re.findall(r'<allow-.*-from domain="(.*)"[ ]*?[\/]?>', crossDomain.text)
+#Remove any duplicates
 domains = list(set(domains))
-errorDomains = []
+possibleDomains = []
+if verbose:
+    print("Crossdomain contents: ")
+
 for domain in domains:
+    if verbose:
+        print(" - " + domain)
     #Regex to get only the root domain, am I missing any special characters?
-    domain = regex.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{3,}|[A-Za-z]{2}\.[A-Za-z]{2}|[A-za-z]{2})(?:\n|$))', domain)
+    #Currently excludes subdomains
+    domain = re.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{3,}|[A-Za-z]{2}\.[A-Za-z]{2}|[A-za-z]{2})(?:\n|$))', domain)
     if domain is not None:
         domain = domain.group(0)
-        print(domain)
         try:
-            sub = Popen("whois " + domain, shell=True, stdout=PIPE, stderr=PIPE)
-            whoisOutput = sub.stdout.read()
-            error_output = sub.stderr.read()
-            if "fgets: Connection reset by peer" in error_output:
-                errorDomains.append(domain)
-            #Check for an error response from the whois command
-            whoisError = regex.search(r'No match|NOT FOUND|Not fo|No Data Fou|has not been regi|No entri', whoisOutput)
-            if whoisError is not None:
-                print("Possible domain found: " + domain)
-        except Exception as e:
-            pass
+            whoisOutput = socket.gethostbyname(domain)
+        except socket_error as serr:
+            #[Errno 11004] getaddrinfo failed
+            #Most likely cause is the domain name has not been purchased
+            if serr.errno == 11004:
+                possibleDomains.append(domain)
 
 #Let the user know of any failed lookups
-if len(errorDomains) > 0:
-    print("\nConnection reset by peer for the following domains: ")
-    for domain in errorDomains:
+if len(possibleDomains) > 0:
+    print("\nPossible expired domains: ")
+    for domain in possibleDomains:
         print(domain)
+
+#Do some cleanup
+sys.stdout = sys.__stdout__
+f.close()
