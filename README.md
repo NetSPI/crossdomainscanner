@@ -12,10 +12,20 @@ pip install -r requirements.txt
 ## Example:
 
 ```
-python scraper.py
-Please enter fully-qualified domain name to search: https://jakereynolds.co
+$> python scraper.py https://jakereynolds.co -v -o output.txt
 
-Possible domain found: thishaskjwfkjansvkjwng.com
+$> cat output.txt
+Searching crossdomain.xml on https://jakereynolds.co for unregistered domains
+
+=============================================================
+
+Crossdomain contents:
+ - thishaskjwfkjansvkjwng.com
+ - testing.com
+ - msnbciweb
+
+Possible expired domains:
+thishaskjwfkjansvkjwng.com
 ```
 
 This means that https://jakereynolds.co allows http://thishaskjwfkjansvkjwng.com in their crossdomain.xml file.  However, the latter is not registered to any DNS.  An attacker could now buy that domain and get full cross-domain access to https://jakereynolds.co
