@@ -1,6 +1,14 @@
 # crossdomainScanner
-Python tool to check for expired domains still allowed in crossdomain.xml files
+Python tool to check for expired domains still allowed in crossdomain.xml files.
+Only works on systems that support the `whois` command.
 
+## Installation
+```
+git clone https://github.com/JacobReynolds/crossdomainScanner.git
+cd crossdomainScanner
+pip install -r requirements.txt
+[follow the example below for runtime usage]
+```
 ## Example:
 
 ```
