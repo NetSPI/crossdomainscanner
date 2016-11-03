@@ -1,10 +1,10 @@
 #!/usr/bin/python
 import re
 import sys
+import errno
 import socket
 import requests
 import argparse
-import errno
 from socket import error as socket_error
 
 #Parse command line arguments
@@ -17,9 +17,7 @@ args = parser.parse_args()
 
 
 inputDomain = args.domain
-verbose = False
-if args.verbose:
-    verbose = True
+verbose = args.verbose
 if args.output:
     f = open(args.output, 'w')
     sys.stdout = f
