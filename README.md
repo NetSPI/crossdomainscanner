@@ -3,17 +3,16 @@ Python tool to check for expired domains still allowed in crossdomain.xml files.
 
 ## Installation
 ```
-git clone https://github.com/JacobReynolds/crossdomainScanner.git
-cd crossdomainScanner
-pip install -r requirements.txt
+~$ git clone https://github.com/JacobReynolds/crossdomainScanner.git
+~$ cd crossdomainScanner
+~$ pip install -r requirements.txt
 [follow the example below for runtime usage]
 ```
 ## Example:
 
 ```
-$> python scraper.py https://jakereynolds.co -v -o output.txt
-
-$> cat output.txt
+~$ python scraper.py https://jakereynolds.co -v -o output.txt
+~$ cat output.txt
 Searching crossdomain.xml on https://jakereynolds.co for unregistered domains
 
 =============================================================
