@@ -50,7 +50,6 @@ for domain in domains:
             print("\n------------Wildcard domain detected - YARD SALE------------")
             continue
 	try:
-            print("domain: " + domain)
             whoisOutput = output = subprocess.check_output(['whois', domain], stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as errorThing:
             if errorThing.returncode == 1:
