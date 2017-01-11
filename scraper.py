@@ -5,6 +5,7 @@ import errno
 import socket
 import requests
 import argparse
+import subprocess
 from socket import error as socket_error
 
 #Parse command line arguments
@@ -48,12 +49,11 @@ for domain in domains:
         if domain == '*':
             print("\n------------Wildcard domain detected - YARD SALE------------")
             continue
-        try:
-            whoisOutput = socket.gethostbyname(domain)
-        except socket_error as serr:
-            #[Errno 11004] getaddrinfo failed
-            #Most likely cause is the domain name has not been purchased
-            if serr.errno == 11004:
+	try:
+            print("domain: " + domain)
+            whoisOutput = output = subprocess.check_output(['whois', domain], stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as errorThing:
+            if errorThing.returncode == 1:
                 possibleDomains.append(domain)
 
 #Let the user know of any failed lookups

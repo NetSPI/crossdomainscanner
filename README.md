@@ -3,6 +3,7 @@ Python tool to check for expired domains still allowed in crossdomain.xml files.
 
 ## Installation
 ```
+~$ sudo apt install whois
 ~$ git clone https://github.com/JacobReynolds/crossdomainScanner.git
 ~$ cd crossdomainScanner
 ~$ pip install -r requirements.txt
