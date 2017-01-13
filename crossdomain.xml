@@ -1,0 +1,10 @@
+<cross-domain-policy>
+<allow-access-from domain="msnbciweb"/>
+<allow-access-from domain="testing1.com"/>
+<allow-access-from domain="testing2.com"/>
+<allow-access-from domain="testing3.com"/>
+<allow-access-from domain="testing4.com"/>
+<allow-access-from domain="thishaskjwfkjansvkjwng.com"/>
+<allow-access-from domain="thishaskjwfkjansadvkjwng.com"/>
+<allow-access-from domain="thishaskjasdaswfkjansvkjwng.com"/>
+</cross-domain-policy>
