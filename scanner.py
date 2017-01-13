@@ -72,6 +72,8 @@ if len(possibleDomains) > 0:
     print("\nPossible expired domains: ")
     for domain in possibleDomains:
         print(domain)
+else:
+    print("No expired domains found")
 
 #Do some cleanup
 if args.output:

@@ -1,9 +1,9 @@
-# crossdomainScanner
+# crossdomainscanner
 Python tool to check for expired domains still allowed in crossdomain.xml files.
 
 ## Installation
 ```
-~$ git clone https://github.com/JacobReynolds/crossdomainScanner.git
+~$ git clone https://github.com/NetSPI/crossdomainscanner
 ~$ cd crossdomainScanner
 ~$ pip install -r requirements.txt
 [follow the example below for runtime usage]
