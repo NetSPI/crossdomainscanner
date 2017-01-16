@@ -32,7 +32,7 @@ if verbose:
 #Request the crossdomain file
 crossDomain = requests.get(inputDomain+"/crossdomain.xml", timeout=10)
 #Parse out all domains from the file
-domains = re.findall(r'<allow-.*-from domain="(.*?)"[ ].*[\/]?>', crossDomain.text)
+domains = re.findall(r'<allow-.*-from domain="(.*?)"[ ]?.*[\/]?>', crossDomain.text)
 #Remove any duplicates
 domains = list(set(domains))
 possibleDomains = []
