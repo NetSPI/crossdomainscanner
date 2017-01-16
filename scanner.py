@@ -20,6 +20,7 @@ args = parser.parse_args()
 
 inputDomain = args.domain
 verbose = args.verbose
+validTLDs = [line.rstrip('\n') for line in open('TLD.txt')]
 if args.output:
     f = open(args.output, 'w')
     sys.stdout = f
@@ -43,12 +44,18 @@ for domain in domains:
         print(" - " + domain)
     #Regex to get only the root domain or wildcard, am I missing any special characters?
     #Currently excludes subdomains
-    domain = re.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{3,}|[A-Za-z]{2}\.[A-Za-z]{2}|[A-za-z]{2})(?:\n|$))|(^\*(?:\n|$))', domain)
-    if domain is not None:
-        domain = domain.group(0)
+    domainGroup = re.search(r'([a-zA-Z0-9-_~]+[.](?:[A-Za-z]{2}\.)?([A-Za-z]{2}|[A-za-z]{2}|[A-Za-z]{3,})(?:\n|$|\/))|(^\*(?:\n|$))', domain)
+    if domainGroup is not None:
+        domain = domainGroup.group(0)
         #Is there a more elegant way to do this, than check in every loop?
         if domain == '*':
             print("\n------------Wildcard domain detected - YARD SALE------------")
+            continue
+        #Make sure the TLD is valid
+        #Does not check for valid SLD (ex: .co.uk, it only verifies .uk not .co)
+        if domainGroup.group(2).lower() not in validTLDs:
+            if verbose:
+                print("  - Invalid TLD: " + domainGroup.group(2).lower())
             continue
     	try:
             #Run whois
