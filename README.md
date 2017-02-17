@@ -19,11 +19,15 @@ Searching crossdomain.xml on https://jakereynolds.co for unregistered domains
 =============================================================
 
 Crossdomain contents:
- - jakereynoldsexpireddomain.com
  - asdaasdasfwkjhcjhbwrgkljsv.com
  - thisisanexpireddomainaswell.es
+ - thishasaninvalidTLD.invalidtld
+  - Invalid TLD: invalidtld
+ - jakereynoldsexpireddomain.com
 
 Possible expired domains:
+asdaasdasfwkjhcjhbwrgkljsv.com
+thisisanexpireddomainaswell.es
 jakereynoldsexpireddomain.com
 ```
 
